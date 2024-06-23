@@ -14,7 +14,10 @@ export const meta: MetaFunction = () => {
 
 export const loader = async () => {
 
-  const getOngoingAnime = await fetch(baseURL + '/ongoing');
+  const getOngoingAnime = await fetch(baseURL + '/ongoing/1', {
+    method: 'GET'
+  });
+
 
   return json({getOngoingAnime: await getOngoingAnime.json() as OnGoingResponse})
 
@@ -26,7 +29,13 @@ export default function Index() {
 
   return (
     <div className="font-sans p-4">
-      {getOngoingAnime.status}
+      {getOngoingAnime.ongoing.map((data, index) => (
+        <div key={index}>
+          <div>{data.title}</div>
+          <div>{data.updated_on}</div>
+        </div>
+        
+      ))}
     </div>
   );
 }
