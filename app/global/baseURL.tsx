@@ -1,0 +1,1 @@
+export const baseURL = 'https://otakudesu-anime-api.vercel.app/api/v1'
