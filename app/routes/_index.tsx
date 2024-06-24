@@ -1,6 +1,8 @@
 import { json, type MetaFunction } from "@remix-run/cloudflare";
-import { useLoaderData, useLocation } from "@remix-run/react";
+import { Link, useLoaderData, useLocation } from "@remix-run/react";
+import { useState } from "react";
 import { baseURL } from "~/global/baseURL";
+import OnGoingResponse from "~/types/OnGoingResponse";
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,17 +27,51 @@ export const loader = async () => {
 export default function Index() {
   const { getOngoingAnime } = useLoaderData<typeof loader>();
   const location = useLocation();
+  const [toggle, setToggle] = useState(false);
 
   return (
     <div className="font-sans bg-slate-50">
       {/* Navbar */}
-      <nav className="shadow-sm py-3">
-        <div className="flex justify-between max-w-[1200px] m-auto px-2">
-          <div>OtakuClone</div>
-          <div className="md:flex space-x-3 hidden">
+      <nav className="bg-white py-3">
+        <div
+          className={`max-w-[1200px] m-auto px-2 md:flex md:justify-between`}
+        >
+          <div className="flex justify-between">
+            <div className="my-auto">OtakuClone</div>
+            <button
+              onClick={() => setToggle(!toggle)}
+              type="button"
+              className="p-2 text-sm text-gray-500 md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
+              aria-controls="navbar-default"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg
+                className="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 17 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 1h15M1 7h15M1 13h15"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div
+            className={`md:flex md:space-x-3 *:py-1 *:hover:cursor-pointer ${
+              !toggle ? "hidden" : ""
+            }`}
+          >
             <div>Home</div>
             <div>Anime List</div>
-            <div>On Going Anime</div>
+            <div>Ongoing Anime</div>
             <div>Genre List</div>
           </div>
         </div>
@@ -47,31 +83,44 @@ export default function Index() {
           {/* card */}
           {getOngoingAnime !== undefined
             ? getOngoingAnime.ongoing.map((value, i) => (
-                <div key={i} className="rounded-t-xl shadow-lg border-s">
-                  <div className="w-full">
-                    <img
-                      className="rounded-t-lg object-cover w-full h-32 sm:h-60 md:h-64 lg:h-72 xl:h-72"
-                      src={`${value.thumb}`}
-                      alt="tumb"
-                    />
-                  </div>
-                  <div className="px-2 content-between pb-2 mt-2">
-                    <div className="text-md font-semibold truncate">{value.title}</div>
-                    <div className="text-sm font-light text-gray-700">
-                      {value.updated_day}, {value.updated_on}
+                <div>
+                  <Link
+                    to={`anime/${value.endpoint.substring(
+                      value.endpoint.indexOf("anime/") + "anime/".length
+                    )}`}
+                  >
+                    <div key={i} className="rounded-t-xl shadow-lg border-s">
+                      <div className="w-full">
+                        <img
+                          className="rounded-t-lg object-cover w-full h-56 sm:h-72"
+                          src={`${value.thumb}`}
+                          alt="tumb"
+                        />
+                      </div>
+                      <div className="px-2 content-between pb-2 mt-2">
+                        <div className="lg:text-md text-sm font-semibold truncate">
+                          {value.title}
+                        </div>
+                        <div className="lg:text-sm text-xs font-light text-gray-700">
+                          {value.updated_day}, {value.updated_on}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               ))
             : ""}
         </div>
         <div className="w-full flex justify-center my-14 space-x-2">
-          <div className="hidden rounded-sm w-fit px-3 py-2 shadow-md border bg-white"> {"<"} Provious Page</div>
-          <div className="rounded-sm w-fit px-3 py-2 shadow-md border bg-white">Next Page {">"}</div>
+          <div className="hidden rounded-sm w-fit px-3 py-2 shadow-md border bg-white">
+            {" "}
+            {"<"} Provious Page
+          </div>
+          <div className="rounded-sm w-fit px-3 py-2 shadow-md border bg-white">
+            Next Page {">"}
+          </div>
         </div>
-        <div className="">
-          Footer
-        </div>
+        <div className="">Footer</div>
       </main>
     </div>
   );
