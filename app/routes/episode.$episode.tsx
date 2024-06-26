@@ -65,7 +65,7 @@ export default function Episode() {
         </div>
         <div className="mt-5">
           <iframe
-            className="w-full aspect-video hover:aspect-square"
+            className="w-full aspect-video"
             src={getEpisode.streamLink}
             allowFullScreen
           ></iframe>
