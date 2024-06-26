@@ -1,6 +1,5 @@
 import { json, type MetaFunction } from "@remix-run/cloudflare";
 import { Link, useLoaderData, useLocation } from "@remix-run/react";
-import { useState } from "react";
 import { baseURL } from "~/global/baseURL";
 import OnGoingResponse from "~/types/OnGoingResponse";
 
@@ -27,56 +26,11 @@ export const loader = async () => {
 export default function Index() {
   const { getOngoingAnime } = useLoaderData<typeof loader>();
   const location = useLocation();
-  const [toggle, setToggle] = useState(false);
 
   return (
     <div className="font-sans bg-slate-50">
-      {/* Navbar */}
-      <nav className="bg-white py-3">
-        <div
-          className={`max-w-[1200px] m-auto px-2 md:flex md:justify-between`}
-        >
-          <div className="flex justify-between">
-            <div className="my-auto">OtakuClone</div>
-            <button
-              onClick={() => setToggle(!toggle)}
-              type="button"
-              className="p-2 text-sm text-gray-500 md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200"
-              aria-controls="navbar-default"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 17 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 1h15M1 7h15M1 13h15"
-                />
-              </svg>
-            </button>
-          </div>
 
-          <div
-            className={`md:flex md:space-x-3 *:py-1 *:hover:cursor-pointer ${
-              !toggle ? "hidden" : ""
-            }`}
-          >
-            <div>Home</div>
-            <div>Anime List</div>
-            <div>Ongoing Anime</div>
-            <div>Genre List</div>
-          </div>
-        </div>
-      </nav>
-      <main className="max-w-[1200px] m-auto px-2">
+      <main className="max-w-[1200px] m-auto px-3">
         <h2 className="text-lg font-semibold mt-6">On-going Anime</h2>
 
         <div className="grid xl:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 mt-3 xl:gap-6 md:gap-4 gap-2">

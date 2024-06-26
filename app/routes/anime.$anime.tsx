@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/cloudflare";
 import { Link, useLoaderData } from "@remix-run/react";
+import Header from "~/Components/Header";
 import { baseURL } from "~/global/baseURL";
 import AnimeDetailResponse from "~/types/AnimeDetailResponse";
 
@@ -22,41 +23,41 @@ export const meta: MetaFunction = () => {
 
 export default function Anime() {
   const { getDetailManga } = useLoaderData<typeof loader>();
-  // ${getDetailManga?.anime_detail.thumb}
   return (
-    <div className="max-w-[1200px] m-auto">
-      <div>
+    <div>
+      <Header />
+      <div className="max-w-[1200px] m-auto">
         <div
-          className="bg-no-repeat h-[340px] bg-cover bg-center blur-sm"
+          className="bg-no-repeat h-[140px] lg:h-[340px] bg-cover bg-center blur-sm brightness-50"
           style={{
             backgroundImage: `url('${getDetailManga?.anime_detail.thumb}')`,
           }}
         ></div>
-        <div className="-mt-44">
+        <div className="lg:-mt-44 -mt-28 px-3">
           <div className="flex">
             <img
-              className="w-44 ml-20 z-20"
+              className="rounded-md lg:w-40 w-24 lg:ml-20 ml-4 z-20"
               src={getDetailManga.anime_detail.thumb}
               alt="picture"
             />
-            <div className="ml-5 text-gray-200 z-30">
-              <div className="text-5xl font-extrabold">
+            <div className="ml-5 text-slate-50 z-30">
+              <div className="xl:text-5xl lg:text-4xl md:text-xl text-lg font-extrabold">
                 {getDetailManga.anime_detail.title}
               </div>
             </div>
           </div>
-          <div>
-            {getDetailManga.anime_detail.sinopsis}
+          <div className="my-6 text-justify">
+            &nbsp;&nbsp;&nbsp; {getDetailManga.anime_detail.sinopsis}
           </div>
 
-          <div>
+          <div className="mb-4">
             {getDetailManga.episode_list.map((value, index) => (
               <Link key={index} to={`/episode/${value.episode_endpoint.substring(
                       value.episode_endpoint.indexOf("episode/") + "episode/".length
                     )}`}>
                 <div className="border rounded-md p-2 mt-2">
-                  <div>{value.episode_title}</div>
-                  <div>{value.episode_date}</div>
+                  <div className="font-medium">{value.episode_title}</div>
+                  <div className="text-sm font-light">{value.episode_date}</div>
                 </div>
               </Link>
             ))}
