@@ -1,4 +1,8 @@
-import { json, type MetaFunction } from "@remix-run/cloudflare";
+import {
+  LoaderFunctionArgs,
+  json,
+  type MetaFunction,
+} from "@remix-run/cloudflare";
 import { Link, useLoaderData, useLocation } from "@remix-run/react";
 import { baseURL } from "~/global/baseURL";
 import OnGoingResponse from "~/types/OnGoingResponse";
@@ -13,8 +17,8 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async () => {
-  const getOngoingAnime = await fetch(baseURL + "/ongoing/1", {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const getOngoingAnime = await fetch(baseURL + "/ongoing/" + params.page, {
     method: "GET",
   });
 
@@ -25,20 +29,19 @@ export const loader = async () => {
 
 export default function Index() {
   const { getOngoingAnime } = useLoaderData<typeof loader>();
+  const location = useLocation();
 
   return (
     <div className="font-sans bg-slate-50">
-
       <main className="max-w-[1200px] m-auto px-3">
         <h2 className="text-lg font-semibold mt-6">On-going Anime</h2>
-
         <div className="grid xl:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 mt-3 xl:gap-6 md:gap-4 gap-2">
           {/* card */}
           {getOngoingAnime !== undefined
             ? getOngoingAnime.ongoing.map((value, i) => (
                 <div>
                   <Link
-                    to={`anime/${value.endpoint.substring(
+                    to={`/anime/${value.endpoint.substring(
                       value.endpoint.indexOf("anime/") + "anime/".length
                     )}`}
                   >
@@ -65,14 +68,22 @@ export default function Index() {
             : ""}
         </div>
         <div className="w-full flex justify-center my-14 space-x-2">
-          <div className="hidden rounded-sm w-fit px-3 py-2 shadow-md border bg-white">
-            {"<"} Provious Page
-          </div>
-          <Link to={`page/${String(Number(getOngoingAnime.currentPage)+1)}`}><div className="rounded-sm w-fit px-3 py-2 shadow-md border bg-white">
-            Next Page {">"}
-          </div>
+          {getOngoingAnime.currentPage !== "1" ? (
+            <Link
+              to={`/page/` + String(Number(getOngoingAnime.currentPage) - 1)}
+            >
+              <div className="rounded-sm w-fit px-3 py-2 shadow-md border bg-white">
+                {"<"} Provious Page
+              </div>
+            </Link>
+          ) : (
+            ""
+          )}
+          <Link to={`/page/` + String(Number(getOngoingAnime.currentPage) + 1)}>
+            <div className="rounded-sm w-fit px-3 py-2 shadow-md border bg-white">
+              Next Page {">"}
+            </div>
           </Link>
-          
         </div>
         <div className="w-full flex py-6 justify-center">
           <div>Unofficial Otakudesu Clone@2024</div>

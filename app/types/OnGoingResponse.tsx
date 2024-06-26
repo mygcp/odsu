@@ -11,6 +11,7 @@ interface OnGoingResponse {
   status: boolean;
   message: string;
   ongoing: Anime[];
+  currentPage: string;
 }
 
 export default OnGoingResponse;

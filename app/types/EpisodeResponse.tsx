@@ -1,4 +1,4 @@
-interface Episode {
+interface EpisodeResponse {
   title: string;
   baseUrl: string;
   id: string;
@@ -39,4 +39,4 @@ interface QualityDetail {
   }[];
 }
 
-export default Episode;
+export default EpisodeResponse;
